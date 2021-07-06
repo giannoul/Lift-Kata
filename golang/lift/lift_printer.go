@@ -7,20 +7,20 @@ import (
 )
 
 // Printer ..
-type Printer interface{
+type Printer interface {
 	PrintLift(lift Lift, floor int) string
 }
 
-type simplePrinter struct {}
+type simplePrinter struct{}
 
 // NewSimplePrinter ..
 func NewSimplePrinter() Printer {
-	return 	&simplePrinter{}
+	return &simplePrinter{}
 }
 
 // PrintLift ..
 func (p simplePrinter) PrintLift(lift Lift, floor int) (liftStr string) {
-	if inRequestedFloor(lift, floor){
+	if inRequestedFloor(lift, floor) {
 		liftStr = fmt.Sprintf(" *%s ", lift.ID)
 	} else {
 		liftStr = fmt.Sprintf("  %s ", lift.ID)
@@ -28,7 +28,7 @@ func (p simplePrinter) PrintLift(lift Lift, floor int) (liftStr string) {
 	return liftStr
 }
 
-type printer struct {}
+type printer struct{}
 
 // NewPrinter ..
 func NewPrinter() Printer {
@@ -43,9 +43,9 @@ func (p printer) PrintLift(lift Lift, floor int) (liftStr string) {
 		} else {
 			liftStr = fmt.Sprintf(" ]%s[", lift.ID)
 		}
-	
+
 	} else {
-		if inRequestedFloor(lift, floor){
+		if inRequestedFloor(lift, floor) {
 			liftStr = fmt.Sprintf("[*%s]", lift.ID)
 		} else {
 			liftStr = fmt.Sprintf(" [%s]", lift.ID)
@@ -63,9 +63,9 @@ func PrintLifts(liftSystem *System, liftPrinter Printer) string {
 		callPadding := whiteSpace(2 - len(calls))
 		floorPadding := whiteSpace(floorNumberLength - len(strconv.Itoa(floor)))
 		lifts := printLiftsForFloor(liftSystem, liftPrinter, floor)
-		result += fmt.Sprintf("%s%d %s%s %s %s%d\n", 
-		floorPadding, floor, strings.Join(calls, ""), callPadding, 
-		strings.Join(lifts, " "), floorPadding, floor)
+		result += fmt.Sprintf("%s%d %s%s %s %s%d\n",
+			floorPadding, floor, strings.Join(calls, ""), callPadding,
+			strings.Join(lifts, " "), floorPadding, floor)
 	}
 	return result
 }
@@ -96,7 +96,7 @@ func inRequestedFloor(lift Lift, floor int) (found bool) {
 	for _, request := range lift.Requests {
 		if request == floor {
 			found = true
-		}	
+		}
 	}
 	return found
 }
@@ -159,9 +159,12 @@ func maxStringLength(strings ...string) string {
 }
 
 func reverseLiftFloors(floors []int) []int {
-	for i := len(floors)/2 - 1; i >= 0; i-- {
+	/*for i := len(floors)/2 - 1; i >= 0; i-- {
 		opp := len(floors) - 1 - i
 		floors[i], floors[opp] = floors[opp], floors[i]
+	}*/
+	for i := len(floors) - 1; i >= 0; i-- {
+		floors[i] = len(floors) - i - 1
 	}
 	return floors
 }
