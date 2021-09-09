@@ -40,6 +40,18 @@ pub mod lift {
             self.requests.push(req);    
         }
 
+        pub fn make_move(&mut self) {
+            if self.requests.len() == 0 {
+                return;
+            }
+
+            if self.direction() == UP {
+                self.floor += 1
+            }else {
+                self.floor -= 1
+            }
+        }
+
         fn has_request_on_floor(&self) -> String {
             let mut r = "";
             for i in 0..self.requests.len() {
@@ -69,7 +81,7 @@ pub mod lift {
                 if self.lifts[i].floor == f {
                     lift = self.lifts[i].print_lift();
                 }else{
-                    for j in 0..self.lifts[i].requests.len() {
+                    for j in 0..self.lifts[i].requests.len() { // Print lift requests for the current floor
                         if self.lifts[i].requests[j] == f {
                             lift = " * ".to_string();
                         }
@@ -101,6 +113,20 @@ pub mod lift {
                 println!("{0}{1}{2}", &self.floors[i],self.print_calls(i as i32),self.print_lifts_for_floor(i as i32));
             }
         }
+
+
+        fn move_lifts(&mut self){
+            for i in 0..self.lifts.len() {
+                self.lifts[i].make_move();
+            }
+        }
+
+        pub fn tick(&mut self){
+            self.move_lifts();
+            self.print_lifts();
+        }
+
+
     }
 
 }
