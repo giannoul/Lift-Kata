@@ -21,9 +21,9 @@ pub mod lift {
 
     impl Lift {
         pub fn print_lift(&self) -> String {
-            let mut lift = format!("[{}]", self.id); // We set the doors closed by default
+            let mut lift = format!("[{}{}]", self.has_request_on_floor(), self.id); // We set the doors closed by default
             if self.doors_open == true {
-                lift = format!("]{}[", self.id);
+                lift = format!("]{}{}[", self.has_request_on_floor(), self.id);
             }
             return lift.to_string()
         }
@@ -38,6 +38,17 @@ pub mod lift {
 
         pub fn push_request(&mut self, req: i32) {
             self.requests.push(req);    
+        }
+
+        fn has_request_on_floor(&self) -> String {
+            let mut r = "";
+            for i in 0..self.requests.len() {
+                if self.requests[i] == self.floor {
+                    r = "*";
+                    break;
+                }
+            }
+            return r.to_string();
         }
 
     }
@@ -57,6 +68,12 @@ pub mod lift {
                 let mut lift = "   ".to_string();
                 if self.lifts[i].floor == f {
                     lift = self.lifts[i].print_lift();
+                }else{
+                    for j in 0..self.lifts[i].requests.len() {
+                        if self.lifts[i].requests[j] == f {
+                            lift = " * ".to_string();
+                        }
+                    }
                 }
                 line.push_str(&lift);
                 line.push_str(&format!(" {}", f));
