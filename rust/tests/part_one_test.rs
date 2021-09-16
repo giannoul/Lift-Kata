@@ -1,6 +1,8 @@
+#[path="../src/lift_container.rs"]
 mod lift_container;
 
-fn main() {
+#[test]
+fn it_adds_two() {
     let f: Vec<i32> = [0,1,2,3,4,5,6].to_vec();
     let mut c = Vec::with_capacity(20);
     c.push(lift_container::lift::Call{
@@ -34,15 +36,6 @@ fn main() {
     system.lifts[0].push_request(1);
     println!("");
     system.tick();
-    system.lifts[0].push_request(5);
-    println!("");
-    system.tick();
 
-    println!("");
-    
-    /*for i in 0..system.lifts[0].requests.len() {
-        println!("{0}",system.lifts[0].requests[i]);
-    }*/
-
-    system.tick()
+    assert_eq!(2 + 2, 4);
 }
